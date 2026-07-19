@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+TRS POWER RANKINGS TEMPLATE v1 -- recurring, competition-wide, weekly
+Repo: trs_templates/power-rankings. Render loop cache-busts with Date.now().
+
+6 slides: Cover, Ranks 1-5, Ranks 6-10, Movers/Methodology, Verdict, Sign-off.
+DOCTRINE: power_score = points*3 + goal_difference + (avg_xg_delta_last3 * 5),
+computed in code from the Fixture Sheet -- Claude supplies editorial copy only
+(the one-line "why" under the table, the movers callout).
+-->
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{margin:0;padding:0;background:#0a0a0a}
+
+#slide-render{
+  width:1080px;
+  height:1080px;
+  position:relative;
+  overflow:hidden;
+  background:#0a0a0a;
+  font-family:'Inter',sans-serif;
+}
+
+.grain{position:absolute;inset:0;z-index:50;pointer-events:none;opacity:0.5;mix-blend-mode:overlay}
+.slide{position:absolute;inset:0;display:none;flex-direction:column}
+.slide.active{display:flex}
+
+/* ============ GLOBAL CHROME (shared brand system) ============ */
+.chr-tl{position:absolute;top:34px;left:44px;z-index:20;font-family:'Bebas Neue',sans-serif;font-size:27px;letter-spacing:7px;color:#AAFF00;line-height:1}
+.chr-tr{position:absolute;top:39px;right:44px;z-index:20;font-size:17px;letter-spacing:4px;color:rgba(170,255,0,0.55);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif}
+.chr-bc{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:20;font-size:16px;letter-spacing:8px;color:rgba(170,255,0,0.35);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif}
+.ch-label{position:absolute;bottom:32px;left:44px;z-index:20;font-size:16px;letter-spacing:4px;color:rgba(170,255,0,0.65);text-transform:uppercase;font-weight:700;font-family:'Inter',sans-serif}
+.sc{position:absolute;bottom:26px;right:44px;font-family:'Bebas Neue',sans-serif;font-size:40px;color:rgba(170,255,0,0.18);letter-spacing:4px;z-index:20;line-height:1}
+.rail{position:absolute;left:0;top:0;bottom:0;width:6px;display:flex;flex-direction:column;gap:5px;z-index:30}
+.rs{flex:1;background:#191919}
+.rs.on{background:#AAFF00}
+
+.inner{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;padding:118px 56px 108px;justify-content:center;overflow:hidden}
+.sec{font-size:24px;letter-spacing:8px;color:#AAFF00;text-transform:uppercase;margin-bottom:20px;font-weight:600;font-family:'Inter',sans-serif}
+.ttl{font-family:'Bebas Neue',sans-serif;font-size:100px;line-height:0.92;color:#fff;letter-spacing:1px;margin-bottom:28px}
+.bod{font-size:40px;color:#fff;line-height:1.5;font-weight:300;font-family:'Inter',sans-serif}
+.vbar{width:96px;height:8px;background:#AAFF00;margin:28px 0}
+.ds-ghost{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:420px;line-height:1;color:#AAFF00;opacity:0.04;right:0;bottom:0;letter-spacing:-16px;pointer-events:none;padding:0 16px 16px 0}
+
+/* ============ S1: COVER ============ */
+.cov-crest{width:220px;height:220px;border-radius:50%;overflow:hidden;border:4px solid rgba(170,255,0,0.4);margin-bottom:32px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:52px;color:#AAFF00;letter-spacing:2px}
+.cov-crest img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ============ S2/S3: RANKINGS ROWS ============ */
+.pr-sec{font-size:24px;letter-spacing:8px;color:#AAFF00;text-transform:uppercase;margin-bottom:8px;font-weight:600;font-family:'Inter',sans-serif}
+.pr-ttl{font-family:'Bebas Neue',sans-serif;font-size:72px;margin-bottom:10px;line-height:0.92;color:#fff;letter-spacing:1px}
+.pr-metric{font-size:19px;letter-spacing:5px;color:#AAFF00;text-transform:uppercase;margin-bottom:26px;font-weight:600;font-family:'Inter',sans-serif}
+.pr-row{display:flex;align-items:center;padding:30px 0;border-bottom:1px solid #181818}
+.pr-row.last{border-bottom:none}
+.pr-row.hide{display:none}
+.pr-rank{font-family:'Bebas Neue',sans-serif;font-size:58px;color:rgba(255,255,255,0.4);width:78px;flex-shrink:0;line-height:1}
+.pr-rank.hi{color:#AAFF00}
+.pr-crest{width:92px;height:92px;border-radius:50%;overflow:hidden;border:3px solid #2a2a2a;flex-shrink:0;margin-right:24px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(255,255,255,0.5);letter-spacing:1px}
+.pr-crest img{width:100%;height:100%;object-fit:cover;display:block}
+.pr-crest.hi{border-color:#AAFF00;color:#AAFF00}
+.pr-name{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#fff;flex:1;letter-spacing:1px;line-height:1}
+.pr-name.hi{color:#AAFF00}
+.pr-score{font-family:'Bebas Neue',sans-serif;font-size:50px;color:#fff;width:110px;text-align:right;line-height:1;margin-right:24px}
+.pr-score.hi{color:#AAFF00}
+.pr-delta{width:74px;flex-shrink:0;text-align:center;font-family:'Bebas Neue',sans-serif}
+.pr-delta .arrow{font-size:24px;line-height:1;display:block}
+.pr-delta .num{font-size:20px;letter-spacing:1px;display:block;margin-top:2px}
+.pr-delta.up .arrow, .pr-delta.up .num{color:#AAFF00}
+.pr-delta.down .arrow, .pr-delta.down .num{color:#E14B54}
+.pr-delta.same .arrow, .pr-delta.same .num{color:rgba(255,255,255,0.3)}
+.pr-delta.isnew .num{color:rgba(170,255,0,0.65);font-size:16px;letter-spacing:2px}
+
+/* ============ S4: MOVERS / METHODOLOGY ============ */
+.mv-row{display:flex;align-items:center;gap:24px;padding:24px 0;border-bottom:1px solid #181818}
+.mv-row.last{border-bottom:none}
+.mv-tag{font-size:20px;letter-spacing:4px;color:#AAFF00;text-transform:uppercase;font-weight:700;width:150px;flex-shrink:0}
+.mv-tag.down{color:#E14B54}
+.mv-team{font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;flex:1;letter-spacing:1px}
+.mv-note{font-size:26px;color:rgba(255,255,255,0.6);font-weight:300;margin-top:6px;line-height:1.4}
+.method-note{font-size:30px;color:rgba(255,255,255,0.7);font-weight:300;line-height:1.55;padding-top:32px;margin-top:8px;border-top:1px solid #1c1c1c}
+.method-formula{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#AAFF00;letter-spacing:1px;margin-top:14px}
+
+/* ============ S6: SIGN-OFF ============ */
+.so-wrap{position:absolute;top:0;left:0;right:0;bottom:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.so-ghost{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:820px;color:#AAFF00;opacity:0.05;pointer-events:none;letter-spacing:-40px;line-height:0.85;top:44%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;user-select:none;z-index:1}
+.so-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
+.so-third{font-family:'Bebas Neue',sans-serif;font-size:156px;color:#AAFF00;letter-spacing:18px;line-height:1;text-align:center;width:100%}
+.so-rail{font-family:'Bebas Neue',sans-serif;font-size:156px;color:#AAFF00;letter-spacing:18px;line-height:1;margin-top:-20px;text-align:center;width:100%}
+.so-sports{font-size:26px;letter-spacing:18px;color:rgba(170,255,0,0.28);text-transform:uppercase;margin-top:14px;font-weight:500;font-family:'Inter',sans-serif}
+.so-rule{width:96px;height:3px;background:rgba(170,255,0,0.18);margin:24px auto}
+.so-tag{font-size:26px;letter-spacing:10px;color:rgba(170,255,0,0.42);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif}
+.so-handle{font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(170,255,0,0.32);letter-spacing:5px;margin-top:10px}
+.so-line{font-size:44px;color:#ffffff;font-weight:300;font-style:italic;padding-top:56px;letter-spacing:0.5px;width:860px;text-align:center;line-height:1.45;font-family:'Inter',sans-serif}
+.platform-block{position:absolute;bottom:120px;left:80px;right:80px;display:flex;flex-direction:column;align-items:center;z-index:5}
+.platform-rule{width:100%;height:2px;background:rgba(255,255,255,0.08);margin-bottom:40px}
+.platform-label{font-size:24px;letter-spacing:10px;color:rgba(170,255,0,0.3);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:28px}
+.platform-row{font-family:'Bebas Neue',sans-serif;font-size:52px;color:rgba(170,255,0,0.55);letter-spacing:8px;text-align:center}
+</style>
+</head>
+<body>
+<div id="slide-render">
+
+<svg class="grain" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+<filter id="gf"><feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch"/>
+<feColorMatrix type="saturate" values="0"/><feBlend in="SourceGraphic" mode="overlay"/></filter>
+<rect width="100%" height="100%" filter="url(#gf)" opacity="0.38"/>
+</svg>
+
+<!-- S1: COVER -->
+<div class="slide {{S1_ACTIVE}}" id="s1">
+<div style="position:absolute;inset:0;background:linear-gradient(160deg,#101010 0%,#0a0a0a 60%)"></div>
+<div class="ds-ghost">{{RANK1_SCORE}}</div>
+<div class="rail"><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
+<div class="chr-tl">THIRD RAIL SPORTS</div>
+<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="inner">
+  <div class="sec">Power Rankings</div>
+  <div class="ttl">{{WEEK_LABEL}}</div>
+  <div class="cov-crest">{{RANK1_PHOTO_HTML}}</div>
+  <div class="bod"><strong style="color:#AAFF00">{{RANK1_TEAM}}</strong> holds the #1 spot. {{COV_SUBTEXT}}</div>
+</div>
+<div class="ch-label">01 &middot; POWER RANKINGS</div>
+<div class="chr-bc">SPORT. DECODED.</div>
+<div class="sc">01 / 06</div>
+</div>
+
+<!-- S2: RANKS 1-5 -->
+<div class="slide {{S2_ACTIVE}}" id="s2">
+<div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
+<div class="chr-tl">THIRD RAIL SPORTS</div>
+<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="inner">
+  <div class="pr-sec">The Field</div>
+  <div class="pr-ttl">RANKS 1-5</div>
+  <div class="pr-metric">Points &middot; GD &middot; Form xG</div>
+  <div class="pr-row"><div class="pr-rank hi">{{RANK1_POS}}</div><div class="pr-crest hi">{{RANK1_PHOTO_HTML}}</div><div class="pr-name hi">{{RANK1_TEAM}}</div><div class="pr-score hi">{{RANK1_SCORE}}</div><div class="pr-delta {{RANK1_DELTA_CLASS}}"><span class="arrow">{{RANK1_DELTA_ARROW}}</span><span class="num">{{RANK1_DELTA_NUM}}</span></div></div>
+  <div class="pr-row"><div class="pr-rank">{{RANK2_POS}}</div><div class="pr-crest">{{RANK2_PHOTO_HTML}}</div><div class="pr-name">{{RANK2_TEAM}}</div><div class="pr-score">{{RANK2_SCORE}}</div><div class="pr-delta {{RANK2_DELTA_CLASS}}"><span class="arrow">{{RANK2_DELTA_ARROW}}</span><span class="num">{{RANK2_DELTA_NUM}}</span></div></div>
+  <div class="pr-row"><div class="pr-rank">{{RANK3_POS}}</div><div class="pr-crest">{{RANK3_PHOTO_HTML}}</div><div class="pr-name">{{RANK3_TEAM}}</div><div class="pr-score">{{RANK3_SCORE}}</div><div class="pr-delta {{RANK3_DELTA_CLASS}}"><span class="arrow">{{RANK3_DELTA_ARROW}}</span><span class="num">{{RANK3_DELTA_NUM}}</span></div></div>
+  <div class="pr-row"><div class="pr-rank">{{RANK4_POS}}</div><div class="pr-crest">{{RANK4_PHOTO_HTML}}</div><div class="pr-name">{{RANK4_TEAM}}</div><div class="pr-score">{{RANK4_SCORE}}</div><div class="pr-delta {{RANK4_DELTA_CLASS}}"><span class="arrow">{{RANK4_DELTA_ARROW}}</span><span class="num">{{RANK4_DELTA_NUM}}</span></div></div>
+  <div class="pr-row last"><div class="pr-rank">{{RANK5_POS}}</div><div class="pr-crest">{{RANK5_PHOTO_HTML}}</div><div class="pr-name">{{RANK5_TEAM}}</div><div class="pr-score">{{RANK5_SCORE}}</div><div class="pr-delta {{RANK5_DELTA_CLASS}}"><span class="arrow">{{RANK5_DELTA_ARROW}}</span><span class="num">{{RANK5_DELTA_NUM}}</span></div></div>
+</div>
+<div class="ch-label">02 &middot; POWER RANKINGS</div>
+<div class="chr-bc">SPORT. DECODED.</div>
+<div class="sc">02 / 06</div>
+</div>
+
+<!-- S3: RANKS 6-10 -->
+<div class="slide {{S3_ACTIVE}}" id="s3">
+<div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
+<div class="chr-tl">THIRD RAIL SPORTS</div>
+<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="inner">
+  <div class="pr-sec">The Field</div>
+  <div class="pr-ttl">RANKS 6-10</div>
+  <div class="pr-metric">Points &middot; GD &middot; Form xG</div>
+  <div class="pr-row {{RANK6_HIDDEN}}"><div class="pr-rank">{{RANK6_POS}}</div><div class="pr-crest">{{RANK6_PHOTO_HTML}}</div><div class="pr-name">{{RANK6_TEAM}}</div><div class="pr-score">{{RANK6_SCORE}}</div><div class="pr-delta {{RANK6_DELTA_CLASS}}"><span class="arrow">{{RANK6_DELTA_ARROW}}</span><span class="num">{{RANK6_DELTA_NUM}}</span></div></div>
+  <div class="pr-row {{RANK7_HIDDEN}}"><div class="pr-rank">{{RANK7_POS}}</div><div class="pr-crest">{{RANK7_PHOTO_HTML}}</div><div class="pr-name">{{RANK7_TEAM}}</div><div class="pr-score">{{RANK7_SCORE}}</div><div class="pr-delta {{RANK7_DELTA_CLASS}}"><span class="arrow">{{RANK7_DELTA_ARROW}}</span><span class="num">{{RANK7_DELTA_NUM}}</span></div></div>
+  <div class="pr-row {{RANK8_HIDDEN}}"><div class="pr-rank">{{RANK8_POS}}</div><div class="pr-crest">{{RANK8_PHOTO_HTML}}</div><div class="pr-name">{{RANK8_TEAM}}</div><div class="pr-score">{{RANK8_SCORE}}</div><div class="pr-delta {{RANK8_DELTA_CLASS}}"><span class="arrow">{{RANK8_DELTA_ARROW}}</span><span class="num">{{RANK8_DELTA_NUM}}</span></div></div>
+  <div class="pr-row {{RANK9_HIDDEN}}"><div class="pr-rank">{{RANK9_POS}}</div><div class="pr-crest">{{RANK9_PHOTO_HTML}}</div><div class="pr-name">{{RANK9_TEAM}}</div><div class="pr-score">{{RANK9_SCORE}}</div><div class="pr-delta {{RANK9_DELTA_CLASS}}"><span class="arrow">{{RANK9_DELTA_ARROW}}</span><span class="num">{{RANK9_DELTA_NUM}}</span></div></div>
+  <div class="pr-row last {{RANK10_HIDDEN}}"><div class="pr-rank">{{RANK10_POS}}</div><div class="pr-crest">{{RANK10_PHOTO_HTML}}</div><div class="pr-name">{{RANK10_TEAM}}</div><div class="pr-score">{{RANK10_SCORE}}</div><div class="pr-delta {{RANK10_DELTA_CLASS}}"><span class="arrow">{{RANK10_DELTA_ARROW}}</span><span class="num">{{RANK10_DELTA_NUM}}</span></div></div>
+</div>
+<div class="ch-label">03 &middot; POWER RANKINGS</div>
+<div class="chr-bc">SPORT. DECODED.</div>
+<div class="sc">03 / 06</div>
+</div>
+
+<!-- S4: MOVERS / METHODOLOGY -->
+<div class="slide {{S4_ACTIVE}}" id="s4">
+<div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
+<div class="chr-tl">THIRD RAIL SPORTS</div>
+<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="inner">
+  <div class="sec">Movers</div>
+  <div class="mv-row">
+    <div class="mv-tag">BIGGEST RISER</div>
+    <div style="flex:1"><div class="mv-team">{{RISER_TEAM}}</div><div class="mv-note">{{RISER_NOTE}}</div></div>
+  </div>
+  <div class="mv-row last">
+    <div class="mv-tag down">BIGGEST FALLER</div>
+    <div style="flex:1"><div class="mv-team">{{FALLER_TEAM}}</div><div class="mv-note">{{FALLER_NOTE}}</div></div>
+  </div>
+  <div class="method-note">Ranked by a blended power score, not raw standings.
+    <div class="method-formula">POINTS &times;3 + GOAL DIFF + FORM xG &times;5</div>
+  </div>
+</div>
+<div class="ch-label">04 &middot; MOVERS</div>
+<div class="chr-bc">SPORT. DECODED.</div>
+<div class="sc">04 / 06</div>
+</div>
+
+<!-- S5: VERDICT -->
+<div class="slide {{S5_ACTIVE}}" id="s5">
+<div class="ds-ghost">{{VERDICT_GHOST}}</div>
+<div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
+<div class="chr-tl">THIRD RAIL SPORTS</div>
+<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="inner">
+  <div class="sec">SPORT. DECODED.</div>
+  <div class="vbar"></div>
+  <div class="ttl">{{VERDICT_LINE}}</div>
+  <div class="bod">{{VERDICT_SUPPORT}}</div>
+</div>
+<div class="ch-label">05 &middot; THE VERDICT</div>
+<div class="chr-bc">SPORT. DECODED.</div>
+<div class="sc">05 / 06</div>
+</div>
+
+<!-- S6: SIGN-OFF -->
+<div class="slide {{S6_ACTIVE}}" id="s6">
+<div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div></div>
+<div class="so-wrap">
+  <div class="so-ghost">TRS</div>
+  <div class="so-content">
+    <div class="so-third">THIRD</div>
+    <div class="so-rail">RAIL</div>
+    <div class="so-sports">Sports</div>
+    <div class="so-rule"></div>
+    <div class="so-tag">Power Rankings</div>
+    <div class="so-handle">@thirdrailsports</div>
+    <div class="so-line">{{SO_LINE}}</div>
+  </div>
+</div>
+<div class="ch-label">06 &middot; SIGN-OFF</div>
+<div class="platform-block">
+  <div class="platform-rule"></div>
+  <div class="platform-label">Follow for more</div>
+  <div class="platform-row">YT &middot; FB &middot; IG &middot; TIKTOK &middot; X &middot; THREADS</div>
+</div>
+<div class="sc" style="color:rgba(170,255,0,0.12)">06 / 06</div>
+</div>
+
+</div>
+</body>
+</html>
