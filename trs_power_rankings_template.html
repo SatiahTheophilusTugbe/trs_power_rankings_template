@@ -4,7 +4,7 @@
 TRS POWER RANKINGS TEMPLATE v1 -- recurring, competition-wide, weekly
 Repo: trs_templates/power-rankings. Render loop cache-busts with Date.now().
 
-6 slides: Cover, Ranks 1-5, Ranks 6-10, Movers/Methodology, Verdict, Sign-off.
+5 slides: Cover, Ranks 1-5, Movers/Methodology, Verdict, Sign-off.
 DOCTRINE: power_score = points*3 + goal_difference + (avg_xg_delta_last3 * 5),
 computed in code from the Fixture Sheet -- Claude supplies editorial copy only
 (the one-line "why" under the table, the movers callout).
@@ -149,28 +149,8 @@ body{margin:0;padding:0;background:#0a0a0a}
 <div class="sc">02 / 06</div>
 </div>
 
-<!-- S3: RANKS 6-10 -->
+<!-- S3: MOVERS / METHODOLOGY -->
 <div class="slide {{S3_ACTIVE}}" id="s3">
-<div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
-<div class="chr-tl">THIRD RAIL SPORTS</div>
-<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
-<div class="inner">
-  <div class="pr-sec">The Field</div>
-  <div class="pr-ttl">RANKS 6-10</div>
-  <div class="pr-metric">Points &middot; GD &middot; Form xG</div>
-  <div class="pr-row {{RANK6_HIDDEN}}"><div class="pr-rank">{{RANK6_POS}}</div><div class="pr-crest">{{RANK6_PHOTO_HTML}}</div><div class="pr-name">{{RANK6_TEAM}}</div><div class="pr-score">{{RANK6_SCORE}}</div><div class="pr-delta {{RANK6_DELTA_CLASS}}"><span class="arrow">{{RANK6_DELTA_ARROW}}</span><span class="num">{{RANK6_DELTA_NUM}}</span></div></div>
-  <div class="pr-row {{RANK7_HIDDEN}}"><div class="pr-rank">{{RANK7_POS}}</div><div class="pr-crest">{{RANK7_PHOTO_HTML}}</div><div class="pr-name">{{RANK7_TEAM}}</div><div class="pr-score">{{RANK7_SCORE}}</div><div class="pr-delta {{RANK7_DELTA_CLASS}}"><span class="arrow">{{RANK7_DELTA_ARROW}}</span><span class="num">{{RANK7_DELTA_NUM}}</span></div></div>
-  <div class="pr-row {{RANK8_HIDDEN}}"><div class="pr-rank">{{RANK8_POS}}</div><div class="pr-crest">{{RANK8_PHOTO_HTML}}</div><div class="pr-name">{{RANK8_TEAM}}</div><div class="pr-score">{{RANK8_SCORE}}</div><div class="pr-delta {{RANK8_DELTA_CLASS}}"><span class="arrow">{{RANK8_DELTA_ARROW}}</span><span class="num">{{RANK8_DELTA_NUM}}</span></div></div>
-  <div class="pr-row {{RANK9_HIDDEN}}"><div class="pr-rank">{{RANK9_POS}}</div><div class="pr-crest">{{RANK9_PHOTO_HTML}}</div><div class="pr-name">{{RANK9_TEAM}}</div><div class="pr-score">{{RANK9_SCORE}}</div><div class="pr-delta {{RANK9_DELTA_CLASS}}"><span class="arrow">{{RANK9_DELTA_ARROW}}</span><span class="num">{{RANK9_DELTA_NUM}}</span></div></div>
-  <div class="pr-row last {{RANK10_HIDDEN}}"><div class="pr-rank">{{RANK10_POS}}</div><div class="pr-crest">{{RANK10_PHOTO_HTML}}</div><div class="pr-name">{{RANK10_TEAM}}</div><div class="pr-score">{{RANK10_SCORE}}</div><div class="pr-delta {{RANK10_DELTA_CLASS}}"><span class="arrow">{{RANK10_DELTA_ARROW}}</span><span class="num">{{RANK10_DELTA_NUM}}</span></div></div>
-</div>
-<div class="ch-label">03 &middot; POWER RANKINGS</div>
-<div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">03 / 06</div>
-</div>
-
-<!-- S4: MOVERS / METHODOLOGY -->
-<div class="slide {{S4_ACTIVE}}" id="s4">
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
 <div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
@@ -188,13 +168,13 @@ body{margin:0;padding:0;background:#0a0a0a}
     <div class="method-formula">POINTS &times;3 + GOAL DIFF + FORM xG &times;5</div>
   </div>
 </div>
-<div class="ch-label">04 &middot; MOVERS</div>
+<div class="ch-label">03 &middot; MOVERS</div>
 <div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">04 / 06</div>
+<div class="sc">03 / 05</div>
 </div>
 
 <!-- S5: VERDICT -->
-<div class="slide {{S5_ACTIVE}}" id="s5">
+<div class="slide {{S4_ACTIVE}}" id="s4">
 <div class="ds-ghost">{{VERDICT_GHOST}}</div>
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
@@ -205,13 +185,13 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="ttl">{{VERDICT_LINE}}</div>
   <div class="bod">{{VERDICT_SUPPORT}}</div>
 </div>
-<div class="ch-label">05 &middot; THE VERDICT</div>
+<div class="ch-label">04 &middot; THE VERDICT</div>
 <div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">05 / 06</div>
+<div class="sc">04 / 05</div>
 </div>
 
-<!-- S6: SIGN-OFF -->
-<div class="slide {{S6_ACTIVE}}" id="s6">
+<!-- S5: SIGN-OFF -->
+<div class="slide {{S5_ACTIVE}}" id="s5">
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div></div>
 <div class="so-wrap">
   <div class="so-ghost">TRS</div>
@@ -225,13 +205,13 @@ body{margin:0;padding:0;background:#0a0a0a}
     <div class="so-line">{{SO_LINE}}</div>
   </div>
 </div>
-<div class="ch-label">06 &middot; SIGN-OFF</div>
+<div class="ch-label">05 &middot; SIGN-OFF</div>
 <div class="platform-block">
   <div class="platform-rule"></div>
   <div class="platform-label">Follow for more</div>
   <div class="platform-row">YT &middot; FB &middot; IG &middot; TIKTOK &middot; X &middot; THREADS</div>
 </div>
-<div class="sc" style="color:rgba(170,255,0,0.12)">06 / 06</div>
+<div class="sc" style="color:rgba(170,255,0,0.12)">05 / 05</div>
 </div>
 
 </div>
