@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
-TRS POWER RANKINGS TEMPLATE v1 -- recurring, competition-wide, weekly
+TRS POWER RANKINGS TEMPLATE v2 -- recurring, competition-wide, weekly
 Repo: trs_templates/power-rankings. Render loop cache-busts with Date.now().
 
 5 slides: Cover, Ranks 1-5, Movers/Methodology, Verdict, Sign-off.
 DOCTRINE: power_score = points*3 + goal_difference + (avg_xg_delta_last3 * 5),
-computed in code from the Fixture Sheet -- Claude supplies editorial copy only
-(the one-line "why" under the table, the movers callout).
+computed in code from the Fixture Sheet -- Claude supplies editorial copy only.
+
+v2 changes:
+- BADGE_LABEL token: league eyebrow label (top center every slide)
+- Accent rule: horizontal line below top chrome for frame effect
+- S2: 3-stat columns (PTS / GD / xG) replace single power score -- label now matches data
+- Dramatic enhancements: radial glow on cover, #1 team highlight, stronger contrast
 -->
 <head>
 <meta charset="UTF-8">
@@ -30,12 +35,43 @@ body{margin:0;padding:0;background:#0a0a0a}
 .slide{position:absolute;inset:0;display:none;flex-direction:column}
 .slide.active{display:flex}
 
-/* ============ GLOBAL CHROME (shared brand system) ============ */
+/* ============ GLOBAL CHROME ============ */
 .chr-tl{position:absolute;top:34px;left:44px;z-index:20;font-family:'Bebas Neue',sans-serif;font-size:27px;letter-spacing:7px;color:#AAFF00;line-height:1}
-.chr-tr{position:absolute;top:39px;right:44px;z-index:20;font-size:17px;letter-spacing:4px;color:rgba(170,255,0,0.55);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif}
+.chr-tr{position:absolute;top:39px;right:44px;z-index:20;font-size:15px;letter-spacing:4px;color:rgba(170,255,0,0.45);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif}
 .chr-bc{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:20;font-size:16px;letter-spacing:8px;color:rgba(170,255,0,0.35);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif}
 .ch-label{position:absolute;bottom:32px;left:44px;z-index:20;font-size:16px;letter-spacing:4px;color:rgba(170,255,0,0.65);text-transform:uppercase;font-weight:700;font-family:'Inter',sans-serif}
 .sc{position:absolute;bottom:26px;right:44px;font-family:'Bebas Neue',sans-serif;font-size:40px;color:rgba(170,255,0,0.18);letter-spacing:4px;z-index:20;line-height:1}
+
+/* League badge -- top center eyebrow */
+.chr-badge{
+  position:absolute;
+  top:32px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:25;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:20px;
+  letter-spacing:8px;
+  color:#AAFF00;
+  background:rgba(170,255,0,0.1);
+  border:1px solid rgba(170,255,0,0.28);
+  padding:5px 20px 4px;
+  text-transform:uppercase;
+  white-space:nowrap;
+  line-height:1;
+}
+
+/* Accent rule below top chrome */
+.accent-rule{
+  position:absolute;
+  top:90px;
+  left:44px;
+  right:44px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(170,255,0,0.25) 20%,rgba(170,255,0,0.25) 80%,transparent);
+  z-index:20;
+}
+
 .rail{position:absolute;left:0;top:0;bottom:0;width:6px;display:flex;flex-direction:column;gap:5px;z-index:30}
 .rs{flex:1;background:#191919}
 .rs.on{background:#AAFF00}
@@ -48,32 +84,40 @@ body{margin:0;padding:0;background:#0a0a0a}
 .ds-ghost{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:420px;line-height:1;color:#AAFF00;opacity:0.04;right:0;bottom:0;letter-spacing:-16px;pointer-events:none;padding:0 16px 16px 0}
 
 /* ============ S1: COVER ============ */
-.cov-crest{width:220px;height:220px;border-radius:50%;overflow:hidden;border:4px solid rgba(170,255,0,0.4);margin-bottom:32px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:52px;color:#AAFF00;letter-spacing:2px}
+.cov-crest{width:220px;height:220px;border-radius:50%;overflow:hidden;border:4px solid rgba(170,255,0,0.4);margin-bottom:32px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:52px;color:#AAFF00;letter-spacing:2px;box-shadow:0 0 48px rgba(170,255,0,0.12),0 0 12px rgba(170,255,0,0.08)}
 .cov-crest img{width:100%;height:100%;object-fit:cover;display:block}
+.cov-rank-ghost{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:680px;line-height:1;color:#AAFF00;opacity:0.045;right:-30px;top:50%;transform:translateY(-50%);pointer-events:none;z-index:1;letter-spacing:-20px}
 
 /* ============ S2/S3: RANKINGS ROWS ============ */
 .pr-sec{font-size:24px;letter-spacing:8px;color:#AAFF00;text-transform:uppercase;margin-bottom:8px;font-weight:600;font-family:'Inter',sans-serif}
 .pr-ttl{font-family:'Bebas Neue',sans-serif;font-size:72px;margin-bottom:10px;line-height:0.92;color:#fff;letter-spacing:1px}
-.pr-metric{font-size:19px;letter-spacing:5px;color:#AAFF00;text-transform:uppercase;margin-bottom:26px;font-weight:600;font-family:'Inter',sans-serif}
-.pr-row{display:flex;align-items:center;padding:30px 0;border-bottom:1px solid #181818}
+.pr-metric{font-size:19px;letter-spacing:5px;color:rgba(170,255,0,0.55);text-transform:uppercase;margin-bottom:26px;font-weight:600;font-family:'Inter',sans-serif}
+.pr-row{display:flex;align-items:center;padding:22px 0;border-bottom:1px solid #181818}
 .pr-row.last{border-bottom:none}
 .pr-row.hide{display:none}
-.pr-rank{font-family:'Bebas Neue',sans-serif;font-size:58px;color:rgba(255,255,255,0.4);width:78px;flex-shrink:0;line-height:1}
+.pr-row.top-row{background:linear-gradient(90deg,rgba(170,255,0,0.04) 0%,transparent 100%);margin:0 -12px;padding:22px 12px;border-radius:2px}
+.pr-rank{font-family:'Bebas Neue',sans-serif;font-size:58px;color:rgba(255,255,255,0.25);width:72px;flex-shrink:0;line-height:1}
 .pr-rank.hi{color:#AAFF00}
-.pr-crest{width:92px;height:92px;border-radius:50%;overflow:hidden;border:3px solid #2a2a2a;flex-shrink:0;margin-right:24px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(255,255,255,0.5);letter-spacing:1px}
+.pr-crest{width:84px;height:84px;border-radius:50%;overflow:hidden;border:3px solid #222;flex-shrink:0;margin-right:20px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:26px;color:rgba(255,255,255,0.4);letter-spacing:1px}
 .pr-crest img{width:100%;height:100%;object-fit:cover;display:block}
-.pr-crest.hi{border-color:#AAFF00;color:#AAFF00}
-.pr-name{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#fff;flex:1;letter-spacing:1px;line-height:1}
+.pr-crest.hi{border-color:#AAFF00;color:#AAFF00;box-shadow:0 0 16px rgba(170,255,0,0.18)}
+.pr-name{font-family:'Bebas Neue',sans-serif;font-size:40px;color:#fff;flex:1;letter-spacing:1px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pr-name.hi{color:#AAFF00}
-.pr-score{font-family:'Bebas Neue',sans-serif;font-size:50px;color:#fff;width:110px;text-align:right;line-height:1;margin-right:24px}
-.pr-score.hi{color:#AAFF00}
-.pr-delta{width:74px;flex-shrink:0;text-align:center;font-family:'Bebas Neue',sans-serif}
-.pr-delta .arrow{font-size:24px;line-height:1;display:block}
-.pr-delta .num{font-size:20px;letter-spacing:1px;display:block;margin-top:2px}
+
+/* 3-stat columns: PTS / GD / xG */
+.pr-stats{display:flex;gap:0;margin-left:8px;flex-shrink:0}
+.pr-stat-col{text-align:center;width:72px;border-left:1px solid #1e1e1e;padding:0 6px}
+.pr-sv{font-family:'Bebas Neue',sans-serif;font-size:34px;color:rgba(255,255,255,0.7);line-height:1}
+.pr-sv.hi{color:#AAFF00}
+.pr-sk{font-size:11px;letter-spacing:3px;color:rgba(170,255,0,0.38);text-transform:uppercase;font-weight:600;margin-top:3px;font-family:'Inter',sans-serif}
+
+.pr-delta{width:68px;flex-shrink:0;text-align:center;font-family:'Bebas Neue',sans-serif;margin-left:6px}
+.pr-delta .arrow{font-size:22px;line-height:1;display:block}
+.pr-delta .num{font-size:18px;letter-spacing:1px;display:block;margin-top:2px}
 .pr-delta.up .arrow, .pr-delta.up .num{color:#AAFF00}
 .pr-delta.down .arrow, .pr-delta.down .num{color:#E14B54}
-.pr-delta.same .arrow, .pr-delta.same .num{color:rgba(255,255,255,0.3)}
-.pr-delta.isnew .num{color:rgba(170,255,0,0.65);font-size:16px;letter-spacing:2px}
+.pr-delta.same .arrow, .pr-delta.same .num{color:rgba(255,255,255,0.2)}
+.pr-delta.isnew .num{color:rgba(170,255,0,0.65);font-size:14px;letter-spacing:2px}
 
 /* ============ S4: MOVERS / METHODOLOGY ============ */
 .mv-row{display:flex;align-items:center;gap:24px;padding:24px 0;border-bottom:1px solid #181818}
@@ -113,11 +157,13 @@ body{margin:0;padding:0;background:#0a0a0a}
 
 <!-- S1: COVER -->
 <div class="slide {{S1_ACTIVE}}" id="s1">
-<div style="position:absolute;inset:0;background:linear-gradient(160deg,#101010 0%,#0a0a0a 60%)"></div>
-<div class="ds-ghost">{{RANK1_SCORE}}</div>
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 8% 8%,rgba(170,255,0,0.08) 0%,transparent 55%),linear-gradient(160deg,#111 0%,#0a0a0a 60%)"></div>
+<div class="cov-rank-ghost">1</div>
 <div class="rail"><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
-<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="chr-badge">{{BADGE_LABEL}}</div>
+<div class="chr-tr">{{WEEK_LABEL}}</div>
+<div class="accent-rule"></div>
 <div class="inner">
   <div class="sec">Power Rankings</div>
   <div class="ttl">{{WEEK_LABEL}}</div>
@@ -126,34 +172,89 @@ body{margin:0;padding:0;background:#0a0a0a}
 </div>
 <div class="ch-label">01 &middot; POWER RANKINGS</div>
 <div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">01 / 05</div>
+<div class="sc">{{S1_SC}}</div>
 </div>
 
 <!-- S2: RANKS 1-5 -->
 <div class="slide {{S2_ACTIVE}}" id="s2">
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 100% 0%,rgba(170,255,0,0.04) 0%,transparent 50%)"></div>
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
-<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="chr-badge">{{BADGE_LABEL}}</div>
+<div class="chr-tr">{{WEEK_LABEL}}</div>
+<div class="accent-rule"></div>
 <div class="inner">
   <div class="pr-sec">The Field</div>
-  <div class="pr-ttl">RANKS 1-5</div>
-  <div class="pr-metric">Points &middot; GD &middot; Form xG</div>
-  <div class="pr-row"><div class="pr-rank hi">{{RANK1_POS}}</div><div class="pr-crest hi">{{RANK1_PHOTO_HTML}}</div><div class="pr-name hi">{{RANK1_TEAM}}</div><div class="pr-score hi">{{RANK1_SCORE}}</div><div class="pr-delta {{RANK1_DELTA_CLASS}}"><span class="arrow">{{RANK1_DELTA_ARROW}}</span><span class="num">{{RANK1_DELTA_NUM}}</span></div></div>
-  <div class="pr-row"><div class="pr-rank">{{RANK2_POS}}</div><div class="pr-crest">{{RANK2_PHOTO_HTML}}</div><div class="pr-name">{{RANK2_TEAM}}</div><div class="pr-score">{{RANK2_SCORE}}</div><div class="pr-delta {{RANK2_DELTA_CLASS}}"><span class="arrow">{{RANK2_DELTA_ARROW}}</span><span class="num">{{RANK2_DELTA_NUM}}</span></div></div>
-  <div class="pr-row"><div class="pr-rank">{{RANK3_POS}}</div><div class="pr-crest">{{RANK3_PHOTO_HTML}}</div><div class="pr-name">{{RANK3_TEAM}}</div><div class="pr-score">{{RANK3_SCORE}}</div><div class="pr-delta {{RANK3_DELTA_CLASS}}"><span class="arrow">{{RANK3_DELTA_ARROW}}</span><span class="num">{{RANK3_DELTA_NUM}}</span></div></div>
-  <div class="pr-row"><div class="pr-rank">{{RANK4_POS}}</div><div class="pr-crest">{{RANK4_PHOTO_HTML}}</div><div class="pr-name">{{RANK4_TEAM}}</div><div class="pr-score">{{RANK4_SCORE}}</div><div class="pr-delta {{RANK4_DELTA_CLASS}}"><span class="arrow">{{RANK4_DELTA_ARROW}}</span><span class="num">{{RANK4_DELTA_NUM}}</span></div></div>
-  <div class="pr-row last"><div class="pr-rank">{{RANK5_POS}}</div><div class="pr-crest">{{RANK5_PHOTO_HTML}}</div><div class="pr-name">{{RANK5_TEAM}}</div><div class="pr-score">{{RANK5_SCORE}}</div><div class="pr-delta {{RANK5_DELTA_CLASS}}"><span class="arrow">{{RANK5_DELTA_ARROW}}</span><span class="num">{{RANK5_DELTA_NUM}}</span></div></div>
+  <div class="pr-ttl">RANKS 1–5</div>
+  <div class="pr-metric">PTS &middot; GD &middot; FORM xG</div>
+  <div class="pr-row top-row">
+    <div class="pr-rank hi">{{RANK1_POS}}</div>
+    <div class="pr-crest hi">{{RANK1_PHOTO_HTML}}</div>
+    <div class="pr-name hi">{{RANK1_TEAM}}</div>
+    <div class="pr-stats">
+      <div class="pr-stat-col"><div class="pr-sv hi">{{RANK1_PTS}}</div><div class="pr-sk">PTS</div></div>
+      <div class="pr-stat-col"><div class="pr-sv hi">{{RANK1_GD}}</div><div class="pr-sk">GD</div></div>
+      <div class="pr-stat-col"><div class="pr-sv hi">{{RANK1_XG}}</div><div class="pr-sk">xG</div></div>
+    </div>
+    <div class="pr-delta {{RANK1_DELTA_CLASS}}"><span class="arrow">{{RANK1_DELTA_ARROW}}</span><span class="num">{{RANK1_DELTA_NUM}}</span></div>
+  </div>
+  <div class="pr-row">
+    <div class="pr-rank">{{RANK2_POS}}</div>
+    <div class="pr-crest">{{RANK2_PHOTO_HTML}}</div>
+    <div class="pr-name">{{RANK2_TEAM}}</div>
+    <div class="pr-stats">
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK2_PTS}}</div><div class="pr-sk">PTS</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK2_GD}}</div><div class="pr-sk">GD</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK2_XG}}</div><div class="pr-sk">xG</div></div>
+    </div>
+    <div class="pr-delta {{RANK2_DELTA_CLASS}}"><span class="arrow">{{RANK2_DELTA_ARROW}}</span><span class="num">{{RANK2_DELTA_NUM}}</span></div>
+  </div>
+  <div class="pr-row">
+    <div class="pr-rank">{{RANK3_POS}}</div>
+    <div class="pr-crest">{{RANK3_PHOTO_HTML}}</div>
+    <div class="pr-name">{{RANK3_TEAM}}</div>
+    <div class="pr-stats">
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK3_PTS}}</div><div class="pr-sk">PTS</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK3_GD}}</div><div class="pr-sk">GD</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK3_XG}}</div><div class="pr-sk">xG</div></div>
+    </div>
+    <div class="pr-delta {{RANK3_DELTA_CLASS}}"><span class="arrow">{{RANK3_DELTA_ARROW}}</span><span class="num">{{RANK3_DELTA_NUM}}</span></div>
+  </div>
+  <div class="pr-row">
+    <div class="pr-rank">{{RANK4_POS}}</div>
+    <div class="pr-crest">{{RANK4_PHOTO_HTML}}</div>
+    <div class="pr-name">{{RANK4_TEAM}}</div>
+    <div class="pr-stats">
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK4_PTS}}</div><div class="pr-sk">PTS</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK4_GD}}</div><div class="pr-sk">GD</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK4_XG}}</div><div class="pr-sk">xG</div></div>
+    </div>
+    <div class="pr-delta {{RANK4_DELTA_CLASS}}"><span class="arrow">{{RANK4_DELTA_ARROW}}</span><span class="num">{{RANK4_DELTA_NUM}}</span></div>
+  </div>
+  <div class="pr-row last">
+    <div class="pr-rank">{{RANK5_POS}}</div>
+    <div class="pr-crest">{{RANK5_PHOTO_HTML}}</div>
+    <div class="pr-name">{{RANK5_TEAM}}</div>
+    <div class="pr-stats">
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK5_PTS}}</div><div class="pr-sk">PTS</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK5_GD}}</div><div class="pr-sk">GD</div></div>
+      <div class="pr-stat-col"><div class="pr-sv">{{RANK5_XG}}</div><div class="pr-sk">xG</div></div>
+    </div>
+    <div class="pr-delta {{RANK5_DELTA_CLASS}}"><span class="arrow">{{RANK5_DELTA_ARROW}}</span><span class="num">{{RANK5_DELTA_NUM}}</span></div>
+  </div>
 </div>
 <div class="ch-label">02 &middot; POWER RANKINGS</div>
 <div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">02 / 05</div>
+<div class="sc">{{S2_SC}}</div>
 </div>
 
 <!-- S3: MOVERS / METHODOLOGY -->
 <div class="slide {{S3_ACTIVE}}" id="s3">
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
-<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="chr-badge">{{BADGE_LABEL}}</div>
+<div class="chr-tr">{{WEEK_LABEL}}</div>
+<div class="accent-rule"></div>
 <div class="inner">
   <div class="sec">Movers</div>
   <div class="mv-row">
@@ -170,15 +271,18 @@ body{margin:0;padding:0;background:#0a0a0a}
 </div>
 <div class="ch-label">03 &middot; MOVERS</div>
 <div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">03 / 05</div>
+<div class="sc">{{S3_SC}}</div>
 </div>
 
 <!-- S4: VERDICT -->
 <div class="slide {{S4_ACTIVE}}" id="s4">
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(170,255,0,0.06) 0%,transparent 60%)"></div>
 <div class="ds-ghost">{{VERDICT_GHOST}}</div>
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
-<div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
+<div class="chr-badge">{{BADGE_LABEL}}</div>
+<div class="chr-tr">{{WEEK_LABEL}}</div>
+<div class="accent-rule"></div>
 <div class="inner">
   <div class="sec">SPORT. DECODED.</div>
   <div class="vbar"></div>
@@ -187,12 +291,13 @@ body{margin:0;padding:0;background:#0a0a0a}
 </div>
 <div class="ch-label">04 &middot; THE VERDICT</div>
 <div class="chr-bc">SPORT. DECODED.</div>
-<div class="sc">04 / 05</div>
+<div class="sc">{{S4_SC}}</div>
 </div>
 
 <!-- S5: SIGN-OFF -->
 <div class="slide {{S5_ACTIVE}}" id="s5">
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div></div>
+<div class="chr-badge">{{BADGE_LABEL}}</div>
 <div class="so-wrap">
   <div class="so-ghost">TRS</div>
   <div class="so-content">
@@ -211,7 +316,7 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="platform-label">Follow for more</div>
   <div class="platform-row">YT &middot; FB &middot; IG &middot; TIKTOK &middot; X &middot; THREADS</div>
 </div>
-<div class="sc" style="color:rgba(170,255,0,0.12)">05 / 05</div>
+<div class="sc" style="color:rgba(170,255,0,0.12)">{{S5_SC}}</div>
 </div>
 
 </div>
