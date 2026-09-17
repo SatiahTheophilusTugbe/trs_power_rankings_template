@@ -108,10 +108,10 @@ body{margin:0;padding:0;background:#0a0a0a}
 .pr-row.top-row{background:linear-gradient(90deg,rgba(170,255,0,0.04) 0%,transparent 100%);margin:0 -12px;padding:18px 12px;border-radius:2px}
 .pr-rank{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(255,255,255,0.25);width:76px;flex-shrink:0;line-height:1}
 .pr-rank.hi{color:#AAFF00}
-.pr-crest{width:84px;height:84px;border-radius:50%;overflow:hidden;border:3px solid #222;flex-shrink:0;margin-right:20px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:26px;color:rgba(255,255,255,0.4);letter-spacing:1px}
+.pr-crest{width:96px;height:96px;border-radius:50%;overflow:hidden;border:3px solid #222;flex-shrink:0;margin-right:20px;background:#141414;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(255,255,255,0.4);letter-spacing:1px}
 .pr-crest img{width:100%;height:100%;object-fit:cover;display:block}
 .pr-crest.hi{border-color:#AAFF00;color:#AAFF00;box-shadow:0 0 16px rgba(170,255,0,0.18)}
-.pr-name{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#fff;flex:1;letter-spacing:1px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-name{font-family:'Bebas Neue',sans-serif;font-size:50px;color:#fff;flex:1;letter-spacing:1px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pr-name.hi{color:#AAFF00}
 
 /* 3-stat columns: PTS / GD / xG — label sits above value */
@@ -131,14 +131,14 @@ body{margin:0;padding:0;background:#0a0a0a}
 .pr-delta.isnew .num{color:rgba(170,255,0,0.75);font-size:18px;letter-spacing:2px}
 
 /* ============ S3: MOVERS / METHODOLOGY ============ */
-.mv-row{display:flex;align-items:flex-start;gap:32px;padding:36px 0}
+.mv-row{display:flex;flex-direction:column;gap:6px;padding:12px 0}
 .mv-row.last{border-top:1px solid #181818}
-.mv-tag{font-size:18px;letter-spacing:5px;color:#AAFF00;text-transform:uppercase;font-weight:700;width:180px;flex-shrink:0;padding-top:8px}
+.mv-tag{font-size:72px;letter-spacing:5px;color:#AAFF00;text-transform:uppercase;font-weight:700;line-height:0.95;width:auto}
 .mv-tag.down{color:#E14B54}
-.mv-team{font-family:'Bebas Neue',sans-serif;font-size:72px;color:#fff;flex:1;letter-spacing:1px;line-height:0.95}
-.mv-note{font-size:30px;color:rgba(255,255,255,0.65);font-weight:300;margin-top:10px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.method-note{font-size:30px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.5;padding-top:36px;margin-top:36px}
-.method-formula{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#AAFF00;letter-spacing:2px;margin-top:16px}
+.mv-team{font-family:'Bebas Neue',sans-serif;font-size:72px;color:#fff;letter-spacing:1px;line-height:0.95}
+.mv-note{font-size:30px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.method-note{font-size:36px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;padding-top:20px;margin-top:16px}
+.method-formula{font-family:'Bebas Neue',sans-serif;font-size:46px;color:#AAFF00;letter-spacing:2px;margin-top:14px}
 #s3 .inner{justify-content:flex-start}
 
 /* ============ S5: SIGN-OFF ============ */
@@ -269,11 +269,13 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="sec">Movers</div>
   <div class="mv-row">
     <div class="mv-tag">BIGGEST RISER</div>
-    <div style="flex:1"><div class="mv-team">{{RISER_TEAM}}</div><div class="mv-note">{{RISER_NOTE}}</div></div>
+    <div class="mv-team">{{RISER_TEAM}}</div>
+    <div class="mv-note">{{RISER_NOTE}}</div>
   </div>
   <div class="mv-row last">
     <div class="mv-tag down">BIGGEST FALLER</div>
-    <div style="flex:1"><div class="mv-team">{{FALLER_TEAM}}</div><div class="mv-note">{{FALLER_NOTE}}</div></div>
+    <div class="mv-team">{{FALLER_TEAM}}</div>
+    <div class="mv-note">{{FALLER_NOTE}}</div>
   </div>
   <div class="method-note">Ranked by the real league table.
     <div class="method-formula">POINTS &middot; GOAL DIFFERENCE &middot; FORM</div>
