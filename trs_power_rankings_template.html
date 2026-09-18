@@ -79,8 +79,9 @@ body{margin:0;padding:0;background:#0a0a0a}
 
 .inner{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;padding:118px 56px 108px;justify-content:center;overflow:hidden}
 .sec{font-size:24px;letter-spacing:8px;color:#AAFF00;text-transform:uppercase;margin-bottom:20px;font-weight:600;font-family:'Inter',sans-serif}
-.ttl{font-family:'Bebas Neue',sans-serif;font-size:100px;line-height:0.92;color:#fff;letter-spacing:1px;margin-bottom:28px}
+.ttl{font-family:'Bebas Neue',sans-serif;font-size:78px;line-height:0.92;color:#fff;letter-spacing:1px;margin-bottom:28px}
 .bod{font-size:40px;color:#fff;line-height:1.5;font-weight:300;font-family:'Inter',sans-serif}
+.bod + .bod{margin-top:24px}
 .vbar{width:96px;height:8px;background:#AAFF00;margin:28px 0}
 .ds-ghost{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:420px;line-height:1;color:#AAFF00;opacity:0.04;right:0;bottom:0;letter-spacing:-16px;pointer-events:none;padding:0 16px 16px 0}
 
@@ -135,11 +136,12 @@ body{margin:0;padding:0;background:#0a0a0a}
 .mv-row.last{border-top:1px solid #181818}
 .mv-tag{font-size:72px;letter-spacing:5px;color:#AAFF00;text-transform:uppercase;font-weight:700;line-height:0.95;width:auto}
 .mv-tag.down{color:#E14B54}
-.mv-team{font-family:'Bebas Neue',sans-serif;font-size:72px;color:#fff;letter-spacing:1px;line-height:0.95}
-.mv-note{font-size:30px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.method-note{font-size:36px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;padding-top:20px;margin-top:16px}
+.mv-team{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#fff;letter-spacing:1px;line-height:0.95}
+.mv-note{font-size:36px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.method-note{font-size:22px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;padding-top:14px;margin-top:10px}
 .method-formula{font-family:'Bebas Neue',sans-serif;font-size:46px;color:#AAFF00;letter-spacing:2px;margin-top:14px}
 #s3 .inner{justify-content:flex-start}
+#s4 .inner{justify-content:flex-start}
 
 /* ============ S5: SIGN-OFF ============ */
 .so-wrap{position:absolute;top:0;left:0;right:0;bottom:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
@@ -299,7 +301,8 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="sec">SPORT. DECODED.</div>
   <div class="vbar"></div>
   <div class="ttl">{{VERDICT_LINE}}</div>
-  <div class="bod">{{VERDICT_SUPPORT}}</div>
+  <div class="bod">{{VERDICT_SUPPORT_1}}</div>
+  <div class="bod">{{VERDICT_SUPPORT_2}}</div>
 </div>
 <div class="ch-label">04 &middot; THE VERDICT</div>
 <div class="chr-bc">SPORT. DECODED.</div>
