@@ -136,14 +136,24 @@ body{margin:0;padding:0;background:#0a0a0a}
 .pr-delta.isnew .num{color:rgba(170,255,0,0.75);font-size:18px;letter-spacing:2px}
 
 /* ============ S3: MOVERS / METHODOLOGY ============ */
-.mv-row{display:flex;flex-direction:column;gap:4px;padding:9px 0;margin-bottom:64px}
+/* Real height budget (#s3 .inner content box = 1080 - 118 top pad - 108 bottom pad = 854px):
+   the prior 64px margin-bottom/margin-top pair (added to fix "45% dead space" on short-note
+   weeks) was never checked against the worst case this same sprint's own prompt allows --
+   two 200-260-char notes both landing at a 5-line clamp. Worst case at those margins needed
+   ~1000px, 146px over budget -- the real cause of the sign-off/method-note rendering on top
+   of the slide's own footer chrome (real EPL GW5 Brentford/Hull City incident, riser 237 /
+   faller 277 chars). Fix is two-part: (1) trim the fixed margins that don't scale with
+   content length, (2) cap the note clamp at 4 lines and tighten the prompt's char target
+   (see Build Draft Prompt RULE 5) so 5 lines stops being a reachable state. New worst case
+   (both notes at the new 4-line/171.6px max) computes to ~831px -- 23px real clearance. */
+.mv-row{display:flex;flex-direction:column;gap:4px;padding:9px 0;margin-bottom:24px}
 .mv-row.last{border-top:1px solid #181818;margin-bottom:0}
 .mv-tag{font-size:72px;letter-spacing:5px;color:#AAFF00;text-transform:uppercase;font-weight:700;line-height:0.95;width:auto}
 .mv-tag.down{color:#E14B54}
 .mv-team{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#fff;letter-spacing:1px;line-height:0.95}
-.mv-note{font-size:33px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.3;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
-.method-note{font-size:22px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;padding-top:14px;margin-top:64px}
-.method-formula{font-family:'Bebas Neue',sans-serif;font-size:46px;color:#AAFF00;letter-spacing:2px;margin-top:10px}
+.mv-note{font-size:33px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.3;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.method-note{font-size:22px;color:rgba(255,255,255,0.65);font-weight:300;line-height:1.4;padding-top:12px;margin-top:24px}
+.method-formula{font-family:'Bebas Neue',sans-serif;font-size:46px;color:#AAFF00;letter-spacing:2px;margin-top:8px}
 #s3 .inner{justify-content:flex-start}
 #s4 .inner{justify-content:flex-start}
 
