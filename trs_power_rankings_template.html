@@ -169,6 +169,60 @@ body{margin:0;padding:0;background:#0a0a0a}
 .platform-rule{width:100%;height:2px;background:rgba(255,255,255,0.08);margin-bottom:36px}
 .platform-label{font-size:22px;letter-spacing:10px;color:rgba(170,255,0,0.3);text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:24px}
 .platform-row{font-family:'Bebas Neue',sans-serif;font-size:52px;color:rgba(170,255,0,0.55);letter-spacing:8px;text-align:center}
+
+/* v2 shared header grid (slides 2-4): identical eyebrow + title position on every content slide */
+#s2 .inner,#s3 .inner,#s4 .inner{justify-content:flex-start;padding-top:150px}
+.hd-sec{font-size:22px;letter-spacing:8px;color:#AAFF00;text-transform:uppercase;font-weight:600;font-family:'Inter',sans-serif;margin-bottom:18px}
+.hd-ttl{font-family:'Bebas Neue',sans-serif;font-size:80px;line-height:0.92;color:#fff;letter-spacing:1px;margin-bottom:40px}
+/* Slide 3 movers v2 */
+.mv2{padding:0 0 30px}
+.mv2 + .mv2{border-top:1px solid rgba(255,255,255,0.08);padding-top:34px}
+.mv2-tag{font-size:24px;letter-spacing:6px;color:#AAFF00;text-transform:uppercase;font-weight:700;font-family:'Inter',sans-serif;margin-bottom:10px}
+.mv2-tag.down{color:#E14B54}
+.mv2-team{font-family:'Bebas Neue',sans-serif;font-size:96px;color:#fff;letter-spacing:1px;line-height:0.9}
+.mv2-stats{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:2px;color:rgba(255,255,255,0.55);margin:8px 0 14px}
+.mv2-stats b{color:#AAFF00;font-weight:400}
+.mv2-stats b.down{color:#E14B54}
+.mv2-line{font-size:42px;color:#fff;font-weight:500;line-height:1.25;font-family:'Inter',sans-serif;max-width:940px}
+/* Slide 4 verdict v2 */
+.vd2-ttl{font-size:132px;line-height:0.9;max-width:960px;margin-bottom:48px}
+.vd2-bod{font-size:52px;color:#fff;font-weight:400;line-height:1.35;font-family:'Inter',sans-serif;max-width:930px}
+/* ---- v3: slide 2 bigger data ---- */
+#s2 .pr-row{padding:14px 0}
+#s2 .pr-row.top-row{padding:14px 12px}
+#s2 .pr-rank{font-size:72px;width:80px}
+#s2 .pr-crest{width:108px;height:108px;margin-right:24px}
+#s2 .pr-name{font-size:60px;text-overflow:clip}
+#s2 .pr-stat-col{width:118px}
+#s2 .pr-stat-col:nth-child(3){width:138px}
+#s2 .pr-sk{font-size:16px;margin-bottom:6px}
+#s2 .pr-sv{font-size:68px}
+#s2 .pr-stat-col:nth-child(3) .pr-sv{font-size:38px}
+#s2 .pr-delta{width:84px}
+#s2 .pr-delta .arrow{font-size:36px}
+#s2 .pr-delta .num{font-size:26px}
+/* ---- v3: slide 3 airy mover blocks (side bar, more space, fewer competing weights) ---- */
+.mv3{border-left:6px solid #AAFF00;padding:4px 0 4px 34px;margin-bottom:58px}
+.mv3.down{border-left-color:#E14B54}
+.mv3-tag{font-size:21px;letter-spacing:6px;color:#AAFF00;text-transform:uppercase;font-weight:700;font-family:'Inter',sans-serif;margin-bottom:14px}
+.mv3.down .mv3-tag{color:#E14B54}
+.mv3-team{font-family:'Bebas Neue',sans-serif;font-size:80px;color:#fff;letter-spacing:1px;line-height:0.9;margin-bottom:12px}
+.mv3-stats{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:3px;color:rgba(255,255,255,0.45);margin-bottom:22px}
+.mv3-stats b{color:#AAFF00;font-weight:400}
+.mv3-stats b.down{color:#E14B54}
+.mv3-line{font-size:38px;color:rgba(255,255,255,0.92);font-weight:400;line-height:1.32;font-family:'Inter',sans-serif;max-width:900px}
+/* ---- v3: slide 4 styled verdict ---- */
+#s4 .vd3-bleed{position:absolute;inset:0;z-index:0;background:{{BLEED_CSS}};opacity:0.9}
+#s4 .vd3-glow{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 0% 100%,rgba(170,255,0,0.10) 0%,transparent 55%)}
+#s4 .vd3-quote{position:absolute;z-index:1;right:40px;top:110px;font-family:Georgia,serif;font-size:520px;line-height:1;color:#AAFF00;opacity:0.07;pointer-events:none}
+.vd3-ttl .acc{color:#AAFF00}
+.vd3-bod{border-left:6px solid #AAFF00;padding:6px 0 6px 32px;font-size:46px;color:rgba(255,255,255,0.92);font-weight:400;line-height:1.35;font-family:'Inter',sans-serif;max-width:900px}
+.vd3-bod .vd3-l{display:block}
+.vd3-bod .vd3-l + .vd3-l{margin-top:14px}
+.vd3-sign{margin-top:44px;font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:6px;color:rgba(170,255,0,0.75)}
+/* Slide 1 dynamic hook */
+.cov-hook2{font-size:46px;line-height:1.3;font-weight:500}
+.cov-hook2 .acc{color:var(--at,#AAFF00);font-weight:700}
 </style>
 </head>
 <body>
@@ -195,7 +249,7 @@ body{margin:0;padding:0;background:#0a0a0a}
 <div class="accent-rule"></div>
 <div class="inner cov-hero-inner">
   <div class="ttl cov-hero-ttl">POWER RANKINGS <span class="cov-hero-dash">&mdash;</span> {{WEEK_LABEL}}</div>
-  <div class="bod cov-hero-bod"><strong style="color:var(--at,#AAFF00)">{{RANK1_TEAM}}</strong> holds the #1 spot. {{COV_SUBTEXT}}</div>
+  <div class="bod cov-hero-bod cov-hook2 fit" data-maxh="190">{{COV_HOOK}}</div>
 </div>
 <div class="ch-label">01 &middot; POWER RANKINGS</div>
 <div class="chr-bc">SPORT. DECODED.</div>
@@ -211,12 +265,12 @@ body{margin:0;padding:0;background:#0a0a0a}
 <div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
 <div class="accent-rule"></div>
 <div class="inner">
-  <div class="pr-sec">The Field</div>
-  <div class="pr-ttl">RANKS 1–5</div>
+  <div class="hd-sec">The Field</div>
+  <div class="hd-ttl">RANKS 1–5</div>
   <div class="pr-row top-row">
     <div class="pr-rank hi">{{RANK1_POS}}</div>
     <div class="pr-crest hi">{{RANK1_PHOTO_HTML}}</div>
-    <div class="pr-name hi">{{RANK1_TEAM}}</div>
+    <div class="pr-name hi fitw">{{RANK1_TEAM}}</div>
     <div class="pr-stats">
       <div class="pr-stat-col"><div class="pr-sk">PTS</div><div class="pr-sv hi">{{RANK1_PTS}}</div></div>
       <div class="pr-stat-col"><div class="pr-sk">GD</div><div class="pr-sv hi">{{RANK1_GD}}</div></div>
@@ -227,7 +281,7 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="pr-row">
     <div class="pr-rank">{{RANK2_POS}}</div>
     <div class="pr-crest">{{RANK2_PHOTO_HTML}}</div>
-    <div class="pr-name">{{RANK2_TEAM}}</div>
+    <div class="pr-name fitw">{{RANK2_TEAM}}</div>
     <div class="pr-stats">
       <div class="pr-stat-col"><div class="pr-sk">PTS</div><div class="pr-sv">{{RANK2_PTS}}</div></div>
       <div class="pr-stat-col"><div class="pr-sk">GD</div><div class="pr-sv">{{RANK2_GD}}</div></div>
@@ -238,7 +292,7 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="pr-row">
     <div class="pr-rank">{{RANK3_POS}}</div>
     <div class="pr-crest">{{RANK3_PHOTO_HTML}}</div>
-    <div class="pr-name">{{RANK3_TEAM}}</div>
+    <div class="pr-name fitw">{{RANK3_TEAM}}</div>
     <div class="pr-stats">
       <div class="pr-stat-col"><div class="pr-sk">PTS</div><div class="pr-sv">{{RANK3_PTS}}</div></div>
       <div class="pr-stat-col"><div class="pr-sk">GD</div><div class="pr-sv">{{RANK3_GD}}</div></div>
@@ -249,7 +303,7 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="pr-row">
     <div class="pr-rank">{{RANK4_POS}}</div>
     <div class="pr-crest">{{RANK4_PHOTO_HTML}}</div>
-    <div class="pr-name">{{RANK4_TEAM}}</div>
+    <div class="pr-name fitw">{{RANK4_TEAM}}</div>
     <div class="pr-stats">
       <div class="pr-stat-col"><div class="pr-sk">PTS</div><div class="pr-sv">{{RANK4_PTS}}</div></div>
       <div class="pr-stat-col"><div class="pr-sk">GD</div><div class="pr-sv">{{RANK4_GD}}</div></div>
@@ -260,7 +314,7 @@ body{margin:0;padding:0;background:#0a0a0a}
   <div class="pr-row last">
     <div class="pr-rank">{{RANK5_POS}}</div>
     <div class="pr-crest">{{RANK5_PHOTO_HTML}}</div>
-    <div class="pr-name">{{RANK5_TEAM}}</div>
+    <div class="pr-name fitw">{{RANK5_TEAM}}</div>
     <div class="pr-stats">
       <div class="pr-stat-col"><div class="pr-sk">PTS</div><div class="pr-sv">{{RANK5_PTS}}</div></div>
       <div class="pr-stat-col"><div class="pr-sk">GD</div><div class="pr-sv">{{RANK5_GD}}</div></div>
@@ -282,19 +336,19 @@ body{margin:0;padding:0;background:#0a0a0a}
 <div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
 <div class="accent-rule"></div>
 <div class="inner">
-  <div class="sec">Movers</div>
-  <div class="mv-row">
-    <div class="mv-tag">BIGGEST RISER</div>
-    <div class="mv-team">{{RISER_TEAM}}</div>
-    <div class="mv-note">{{RISER_NOTE}}</div>
+  <div class="hd-sec">Movers</div>
+  <div class="hd-ttl">THE WEEK'S SWINGS</div>
+  <div class="mv3">
+    <div class="mv3-tag">&#9650; Biggest riser</div>
+    <div class="mv3-team">{{RISER_TEAM}}</div>
+    <div class="mv3-stats">{{RISER_STATS}}</div>
+    <div class="mv3-line fit" data-maxh="104">{{RISER_LINE}}</div>
   </div>
-  <div class="mv-row last">
-    <div class="mv-tag down">BIGGEST FALLER</div>
-    <div class="mv-team">{{FALLER_TEAM}}</div>
-    <div class="mv-note">{{FALLER_NOTE}}</div>
-  </div>
-  <div class="method-note">Ranked by the real league table.
-    <div class="method-formula">POINTS &middot; GOAL DIFFERENCE &middot; FORM</div>
+  <div class="mv3 down">
+    <div class="mv3-tag">&#9660; Biggest faller</div>
+    <div class="mv3-team">{{FALLER_TEAM}}</div>
+    <div class="mv3-stats">{{FALLER_STATS}}</div>
+    <div class="mv3-line fit" data-maxh="104">{{FALLER_LINE}}</div>
   </div>
 </div>
 <div class="ch-label">03 &middot; MOVERS</div>
@@ -305,18 +359,17 @@ body{margin:0;padding:0;background:#0a0a0a}
 <!-- S4: VERDICT -->
 <div class="slide {{S4_ACTIVE}}" id="s4">
 <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(170,255,0,0.06) 0%,transparent 60%)"></div>
-<div class="ds-ghost">{{VERDICT_GHOST}}</div>
+<div class="vd3-bleed"></div><div class="vd3-glow"></div><div class="vd3-quote">&rdquo;</div>
 <div class="rail"><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs on"></div><div class="rs"></div></div>
 <div class="chr-tl">THIRD RAIL SPORTS</div>
 <div class="chr-badge">{{BADGE_LABEL}}</div>
 <div class="chr-tr">POWER RANKINGS &middot; {{WEEK_LABEL}}</div>
 <div class="accent-rule"></div>
 <div class="inner">
-  <div class="sec">SPORT. DECODED.</div>
-  <div class="vbar"></div>
-  <div class="ttl">{{VERDICT_LINE}}</div>
-  <div class="bod">{{VERDICT_SUPPORT_1}}</div>
-  <div class="bod">{{VERDICT_SUPPORT_2}}</div>
+  <div class="hd-sec">The Verdict</div>
+  <div class="hd-ttl vd2-ttl vd3-ttl fit" data-maxh="480">{{VERDICT_LINE_HTML}}</div>
+  <div class="vd3-bod fit" data-maxh="330">{{VERDICT_SUPPORT_LINES}}</div>
+  <div class="vd3-sign">&mdash; THIRD RAIL TAKE</div>
 </div>
 <div class="ch-label">04 &middot; THE VERDICT</div>
 <div class="chr-bc">SPORT. DECODED.</div>
@@ -346,6 +399,17 @@ body{margin:0;padding:0;background:#0a0a0a}
 </div>
 
 </div>
+<script>
+document.querySelectorAll('.slide.active .fitw').forEach(function (el) {
+  var fs = parseFloat(getComputedStyle(el).fontSize), floor = fs * 0.62;
+  while (el.scrollWidth > el.clientWidth && fs > floor) { fs -= 2; el.style.fontSize = fs + 'px'; }
+});
+document.querySelectorAll('.slide.active .fit').forEach(function (el) {
+  var max = parseFloat(el.getAttribute('data-maxh')) || 200;
+  var fs = parseFloat(getComputedStyle(el).fontSize), floor = fs * 0.7;
+  while (el.scrollHeight > max && fs > floor) { fs -= 2; el.style.fontSize = fs + 'px'; }
+});
+</script>
 </body>
 </html>
 
